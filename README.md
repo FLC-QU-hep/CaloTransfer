@@ -24,7 +24,6 @@ Accurate particle shower simulation remains a critical computational bottleneck 
 - [Dataset](#dataset)
 - [Training](#training)
 - [Evaluation](#evaluation)
-- [Plots](#plots)
 - [Citation](#citation)
 - [Contact](#contact)
 
@@ -52,27 +51,15 @@ This work uses the CaloClouds II architecture, a geometry-independent diffusion 
 The base model implementation is from [FLC-QU-hep/CaloClouds-2](https://github.com/FLC-QU-hep/CaloClouds-2).
 
 ## Dataset
-This project uses two datasets representing different detector geometries:
 
-Source Domain: ILD detector photon showers (Zenodo DOI: 10.5281/zenodo.10044175)
-
-Target Domain: CaloChallenge Dataset 3 electron showers (calochallenge.github.io)
-
-For detailed dataset specifications, preprocessing instructions, data formats, and geometric mismatch details, see data/REA
-
+For detailed dataset specifications, preprocessing instructions, data formats, and geometric mismatch details, see [calotransfer/data/READ.ME](calotransfer/data/README.md)
 
 ## Training
 
 ### Pre-training on Source Domain (ILD)
 
-Train the base model on ILD photon showers:
-
-```bash
-python scripts/train_source.py \
-    --data data/source/photons_ILD.hdf5 \
-    --config configs/pretrain_ild.yaml \
-    --output checkpoints/source_model
-```
+Train the base model on ILD photon showers from [FLC-QU-hep/CaloClouds-2](https://github.com/FLC-QU-hep/CaloClouds-2). 
+The pre-trained weights are 
 
 ### Transfer Learning to Target Domain
 
@@ -134,50 +121,6 @@ python scripts/evaluate.py \
     --output results/metrics.json
 ```
 
-Evaluation metrics include:
-- Wasserstein distance
-- Energy resolution
-- Shower shape observables
-- Layer-wise energy deposits
-
-### Generate Paper Figures
-```bash
-python scripts/make_figures.py \
-    --results results/ \
-    --output figures/
-```
-
-## Project Structure
-
-TBA:
-```
-
-.
-├── configs/                    # Training configurations
-│   ├── pretrain_ild.yaml
-│   ├── train_scratch.yaml
-│   └── transfer_learning.yaml
-├── data/                       # Dataset directory (gitignored)
-│   ├── source/
-│   └── target/
-├── scripts/                    # Executable scripts
-│   ├── train_source.py
-│   ├── train_target.py
-│   ├── transfer_learning.py
-│   ├── generate.py
-│   ├── evaluate.py
-│   └── make_figures.py
-├── src/                        # Source code
-│   └── calosim/
-│       ├── models/             # Model architectures
-│       ├── data/               # Data loading
-│       ├── training/           # Training loops
-│       └── evaluation/         # Metrics
-├── environment.yml
-├── .gitignore
-└── README.md
-```
-
 ## Citation
 
 If you use this work, please cite:
@@ -194,7 +137,7 @@ If you use this work, please cite:
 
 ## License
 
-This project is licensed under the MIT License - see `LICENSE` for details.
+This project is licensed under the MIT License - see [`LICENSE`](LICENSE) for details.
 
 ## Contact
 
