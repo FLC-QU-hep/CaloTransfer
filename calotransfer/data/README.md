@@ -5,7 +5,7 @@ This directory contains the data used for training and evaluation. **Data files 
 ## Directory Structure
 
 ```
-data/
+calotransfer/data/
 ├── README.md           # This file
 ├── source/             # Source domain (ILD detector)
 │   ├── .gitkeep
@@ -25,7 +25,7 @@ data/
 
 **Download:**
 ```bash
-cd data/source/
+cd calotransfer/data/source/
 wget https://zenodo.org/records/10044175
 ```
 
@@ -50,7 +50,7 @@ Follow instructions at the official CaloChallenge website:
 
 **Alternatively:**
 ```bash
-cd data/target/
+cd calotransfer/data/target/
 # Download Dataset 3
 wget https://zenodo.org/records/6366324
 ```
@@ -75,100 +75,25 @@ Transfer learning must handle these domain shifts:
 | **Geometry** | Regular | Cylindrical |
 | **Energy range** | 10-90 GeV | 1-1000 GeV |
 | **Energy distribution** | Uniform | Log-normal |
-| **Avg points/shower** | ~6,000 | ~20,000 |
 | **Layers** | 30 | 45 |
-| **Max points** | ~8,000 | ~25,000 |
+| **Max points** | ~6k | ~20k |
 
 ## Data Preprocessing
 
-After downloading both datasets, run preprocessing:
+The preprocessing on CaloChallenge dataset is done via the notebook [preprocessing.ipynb](../scripts/preprocessing/preprocessing.ipynb).
 
-```bash
-python scripts/preprocess_data.py \
-    --source data/source/photons_ILD.hdf5 \
-    --target data/target/electrons_calo_challenge.hdf5 \
-    --output data/processed/
-```
 
 This will:
 1. Normalize point cloud coordinates
 2. Standardize energy scales
-3. Create train/validation/test splits
-4. Generate few-shot subsets (100, 500, 1000 samples)
+3. Create train/validation splits
+4. Cylindrical smearing to facilitate the transfer
 
 **Output files:**
 ```
-data/processed/
+calotransfer/data/processed/
 ├── source_train.hdf5
 ├── source_val.hdf5
 ├── target_train_full.hdf5
-├── target_train_100.hdf5   # Few-shot: 100 samples
-├── target_train_500.hdf5   # Few-shot: 500 samples
-├── target_val.hdf5
-└── target_test.hdf5
+└── target_val.hdf5
 ```
-
-## Data Format Specifications
-
-Both datasets use the HDF5 format with the following structure:
-
-### Point Cloud Representation
-Each shower is represented as a point cloud with shape `(N_points, 4)`:
-- **Column 0:** x-coordinate (mm)
-- **Column 1:** y-coordinate (mm)
-- **Column 2:** z-coordinate (mm) / layer index
-- **Column 3:** deposited energy (GeV)
-
-### Variable-Length Showers
-Showers have variable numbers of hits. We use:
-- **Zero-padding:** Pad to maximum length with zeros
-- **Mask:** Include mask array to identify valid points
-
-```python
-# Example loading code
-import h5py
-import numpy as np
-
-with h5py.File('data/source/photons_ILD.hdf5', 'r') as f:
-    showers = f['showers'][:]          # (N, max_points, 4)
-    energies = f['incident_energies'][:]  # (N,)
-    masks = f['masks'][:]              # (N, max_points) - 1 for valid, 0 for padding
-    
-# Get first shower with valid points only
-shower_0 = showers[0][masks[0].astype(bool)]
-print(f"Shower 0: {len(shower_0)} hits, incident energy: {energies[0]:.2f} GeV")
-```
-
-## Citations
-
-If you use these datasets, please cite:
-
-**ILD Source Domain:**
-```bibtex
-@dataset{ild_photons_2024,
-  author = {...},
-  title = {ILD Photon Electromagnetic Shower Dataset},
-  year = {2024},
-  publisher = {Zenodo},
-  doi = {10.5281/zenodo.10044175}
-}
-```
-
-**CaloChallenge Target Domain:**
-```bibtex
-@article{calochallenge2023,
-  title={The Fast Calorimeter Simulation Challenge},
-  author={...},
-  journal={...},
-  year={2023}
-}
-```
-
-## Data Availability Statement
-
-All datasets used in this work are publicly available and can be downloaded from the sources listed above. No proprietary or restricted data is used.
-
-## Contact
-
-For questions about the data or preprocessing, contact:
-- Lorenzo Valente: lorenzo.valente@uni-hamburg.de
