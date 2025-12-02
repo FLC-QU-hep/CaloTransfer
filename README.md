@@ -5,7 +5,7 @@
 
 Lorenzo Valente, Gregor Kasieczka, Frank Gaede
 
-[![arXiv](https://img.shields.io/badge/arXiv-2511.XXXXX-red)](https://arxiv.org/abs/2511.XXXXX)
+[![arXiv](https://img.shields.io/badge/arXiv-2512.00187-red)](https://arxiv.org/abs/2512.00187)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.5-orange)](https://pytorch.org)
 [![Python](https://img.shields.io/badge/Python-3.12-blue)](https://www.python.org)
 
@@ -17,10 +17,10 @@ Lorenzo Valente, Gregor Kasieczka, Frank Gaede
 
 **Abstract:**  
 Accurate particle shower simulation remains a critical computational bottleneck for high-energy physics.
-Traditional Monte Carlo methods, such as \textsc{Geant4}, are computationally prohibitive, while existing machine learning surrogates are tied to specific detector geometries and require complete retraining for each design change or alternative detector. 
+Traditional Monte Carlo methods, such as Geant4, are computationally prohibitive, while existing machine learning surrogates are tied to specific detector geometries and require complete retraining for each design change or alternative detector. 
 We present a transfer learning framework for generative calorimeter simulation models that enables adaptation across diverse geometries with high data efficiency. 
-Using point cloud representations and pre-training on the International Large Detector detector, our approach handles new configurations without re-voxelizing showers for each geometry. 
-On the \textsc{CaloChallenge} dataset, transfer learning with only 100 target-domain samples achieves a Wasserstein distance improvement of $44\%$ over training from scratch. 
+Using point cloud representations and pre-training on the International Large Detector, our approach handles new configurations without re-voxelizing showers for each geometry. 
+On the CaloChallenge dataset, transfer learning with only 100 target-domain samples achieves a Wasserstein distance improvement of $44\%$ over training from scratch. 
 Parameter-efficient fine-tuning with bias-only adaptation achieves competitive performance while updating only $17\%$ of model parameters. 
 Our analysis provides insight into adaptation mechanisms for particle shower development, establishing a baseline for future progress of point cloud approaches in calorimeter simulation.
 
@@ -65,7 +65,6 @@ For detailed dataset specifications, preprocessing instructions, data formats, a
 ### Pre-training on Source Domain (ILD)
 
 Train the base model on ILD photon showers from [FLC-QU-hep/CaloClouds-2](https://github.com/FLC-QU-hep/CaloClouds-2).
-The pre-trained weights are available at [link to be added].
 
 ### Transfer Learning to Target Domain
 
@@ -134,11 +133,14 @@ See [calotransfer/scripts/evaluation/](calotransfer/scripts/evaluation/) for add
 If you use this work, please cite:
 
 ```bibtex
-@article{valente2025crossgeometry,
-  title={Cross-Geometry Transfer Learning for Fast Electromagnetic Shower Simulation},
-  author={Valente, Lorenzo and Kasieczka, Gregor and Gaede, Frank},
-  journal={arXiv preprint arXiv:2511.XXXXX},
-  year={2025}
+@article{Gaede:2025shc,
+    author = "Gaede, Frank and Kasieczka, Gregor and Valente, Lorenzo",
+    title = "{Cross-Geometry Transfer Learning in Fast Electromagnetic Shower Simulation}",
+    eprint = "2512.00187",
+    archivePrefix = "arXiv",
+    primaryClass = "physics.ins-det",
+    month = "11",
+    year = "2025"
 }
 ```
 
